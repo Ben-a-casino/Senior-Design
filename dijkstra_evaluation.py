@@ -95,7 +95,7 @@ if __name__ == "__main__":
     transfer_time = 10 # minutes
 
     routes_file = "smaller_toy_routes.csv"
-    route_df = pd.read_csv(os.path.join(routes_file), index_col=0)
+    route_df = pd.read_csv(os.path.join(data_folder, routes_file), index_col=0)
 
     total_cost, predecessors = evaluate_solution(route_df, school_demand_df, BD, WD, transfer_time) 
 
