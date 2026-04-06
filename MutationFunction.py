@@ -84,6 +84,22 @@ def valid_replacements(original_routes, change_matrix, r, s, adj, depot):
     # all nodes minus used nodes and depot
     candidates = set(adj.index) - used - {depot}
 
+    """
+    Diran here, I believe the initial candidates should
+    be any node the current node is adjacent to, based
+    on the adjacency matrix. You can get that set using:
+    
+        candidates = set(np.flatnonzero(adj[old,:]))
+
+    np.flatnonzero returns the indices of nonzero elements 
+    of the input array. Since the adjacency matrix is zeros
+    and ones, life is good. 
+
+    The row of the adjacency matrix corresponding to the 
+    current node indicates all other nodes adjacent to it,
+    hence slicing that row and all columns. 
+    """
+    
     # enforce adjacency with previous node (if exists)
     if s > 0:
         prev_node = route[s - 1]
