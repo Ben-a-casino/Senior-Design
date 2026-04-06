@@ -104,11 +104,16 @@ def valid_replacements(original_routes, change_matrix, r, s, adj, depot):
     if s > 0:
         prev_node = route[s - 1]
         candidates = {c for c in candidates if adj.loc[prev_node, c] == 1}
+        # We aren't utilizing set operations or numpy operations, making this slow
+        # candidates = candidates.intersection(set(np.flatnonzero(adj[prev_node,:])))
 
     # enforce adjacency with next node (if exists)
     if s < len(route) - 1:
         next_node = route[s + 1]
         candidates = {c for c in candidates if adj.loc[next_node, c] == 1}
+        # Same critique here as above
+        # candidates = candidates.intersection(set(np.flatnonzero(adj[next_node,:])))
+        
 
     return list(candidates)
 
