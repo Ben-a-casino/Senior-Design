@@ -60,8 +60,7 @@ class Baltimore:
     BT = bussing_times
     
     D = school_demand_df
-    baseline_routes = original routes
-
+    baseline_routes = original_routes
     
     transfer_time = 10 # minutes
     delta_max = 2
@@ -70,7 +69,7 @@ class Baltimore:
         return spread_crossover(parents, offspring_size, ga_instance)
 
     def mutation(self, offspring, ga_instance):
-        return mutate(self.baseline_routes, change_matrix, adj, self.delta_max)
+        return mutate(self.baseline_routes, offspring, self.WT, self.delta_max)
 
     def fitness(self, ga_instance, solution, solution_idx):
         return evaluate_solution(solution, self.D, self.BT, self.WT, self.transfer_time)[0] # the evaluation returns predecessor nodes, don't need them
@@ -112,21 +111,17 @@ ga_instance = pygad.GA(
 
 
 # EXAMPLE USAGE
-
-
-baseline_solution = [0.1, 0.2, 0.3, 0.4]
-before_routes = decode_solution(baseline_solution)
+initial_objective_value = Baltimore().fitness(None, original_routes, 0)[0]
 
 ga_instance.run()
 
 best_solution, solution_fitness, _ = ga_instance.best_solution()
-after_routes = decode_solution(best_solution)
 
 print("Before routes:", before_routes)
 print("After routes:", after_routes)
-print("Before cost:", route_cost(before_routes, stops, depot))
-print("After cost:", route_cost(after_routes, stops, depot))
-print("Improvement:", route_cost(before_routes, stops, depot) - route_cost(after_routes, stops, depot))
+print("Before cost:", initial_objective_value)
+print("After cost:", solution_fitness)
+print("Improvement:", solution_fitness - initial_objective_value)
 
-plot_routes(before_routes, stops, depot, "Initial Routes")
-plot_routes(after_routes, stops, depot, "Optimized Routes")
+# plot_routes(before_routes, stops, depot, "Initial Routes")
+# plot_routes(after_routes, stops, depot, "Optimized Routes")
